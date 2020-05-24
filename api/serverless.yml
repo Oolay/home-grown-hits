@@ -74,6 +74,18 @@ functions:
           path: /hits-games
           method: post
           cors: true
+  connection-manager:
+    handler: 'src/websocket/connectionManager.connectionManager'
+    events:
+        - websocket:
+          route: $connect
+        - websocket:
+          route: $disconnect
+  default-message:
+    handler: src/websocket/defaultMessage.defaultMessage
+    events:
+      - websocket:
+          route: $default
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
