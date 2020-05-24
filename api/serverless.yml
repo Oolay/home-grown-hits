@@ -75,11 +75,11 @@ functions:
           method: post
           cors: true
   connection-manager:
-    handler: 'src/websocket/connectionManager.connectionManager'
+    handler: src/websocket/connectionManager.connectionManager
     events:
-        - websocket:
+      - websocket:
           route: $connect
-        - websocket:
+      - websocket:
           route: $disconnect
   default-message:
     handler: src/websocket/defaultMessage.defaultMessage
