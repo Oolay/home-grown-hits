@@ -17,11 +17,11 @@ interface Props extends WithStyles, RouteComponentProps<ParamProps> {}
 
 class Game extends React.Component<Props> {
     componentDidMount() {
-        subscriptionStore.initialise()
+        const { gameId } = this.props.match.params
+
+        subscriptionStore.initialise(gameId)
 
         subscriptionStore.subscribe('hitsEvent', this.eventHandler)
-
-        const { gameId } = this.props.match.params
 
         if (gameId) {
             this.loadPreviousEvents(gameId)

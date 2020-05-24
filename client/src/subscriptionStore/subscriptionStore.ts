@@ -48,7 +48,8 @@ export function isConnectionChangeEvent(
 export class SubscriptionStore {
     public connected = false
 
-    public initialise() {
+    public initialise(gameId: string) {
+        this.gameId = gameId
         this.connect()
         if (this.hasSubscribers) {
             // this.connect()
@@ -97,6 +98,7 @@ export class SubscriptionStore {
     private token: string | null = null
     private doExpBackOff = backOff(BACK_OFF_OPTIONS)
     private disconnectionTimestamp: string | null = null
+    private gameId: string | null = null
 
     private get hasTokenExpired() {
         // No expirations atm
@@ -110,7 +112,7 @@ export class SubscriptionStore {
 
             if (shouldConnect) {
                 console.info('connecting to ws...')
-                this.ws = new WebSocket(this.websocketEndpoint)
+                this.ws = new WebSocket(`${this.websocketEndpoint}?gameId=${this.gameId}`)
 
                 this.ws.onerror = this.handleError
                 this.ws.onmessage = this.handleOnMessage
