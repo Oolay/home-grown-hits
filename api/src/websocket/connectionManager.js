@@ -38,8 +38,6 @@ module.exports.connectionManager = async event => {
                 connectionId : event.requestContext.connectionId,
             }
 
-            console.log('gameId', gameId, 'connectionId', event.requestContext.connectionId)
-
             await saveConnection(connection, gameId)
 
             return {
