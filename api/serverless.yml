@@ -29,9 +29,15 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action:
+        - dynamodb:Scan
+        - dynamodb:GetItem
         - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:Query
+        - dynamodb:DeleteItem
       Resource:
         - arn:aws:dynamodb:ap-southeast-2:972124391741:table/homeGrownHitsGames
+        - arn:aws:dynamodb:ap-southeast-2:972124391741:table/homeGrownHitsConnections
 
 # you can overwrite defaults here
 #  stage: dev

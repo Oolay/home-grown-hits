@@ -55,6 +55,7 @@ module.exports.connectionManager = async event => {
             }
         }
     } catch (error) {
+        console.error(error)
         return {
             statusCode: 500,
             body: `connectionManager error: ${error.message}`,
