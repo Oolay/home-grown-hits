@@ -9,9 +9,6 @@ AWS.config.update({
 })
 const sns = new AWS.SNS()
 
-const getArn = (topic : string) =>
-    `arn:aws:sns:${process.env.REGION}:${process.env.AWS_ACCOUNT_ID}:${process.env.STAGE}-${topic}`
-
 export const pushSNSWebSocketEvent = (event) => {
     const params = {
         TargetArn: process.env.GAME_SNS_TOPIC_ARN,
@@ -21,14 +18,12 @@ export const pushSNSWebSocketEvent = (event) => {
     return sns.publish(params).promise()
 }
 
-
-
 module.exports.gameStreamHandler = (event, _context, callback) => {
     console.info('Received event:', JSON.stringify(event, null, 2))
 
     try {
         const events = event.Records.reduce((acc, record) => {
-            if (record.eventName === 'INSERT') {
+            if (record.eventName === 'INSERT' || record.eventName === 'MODIFY') {
                 const unmarshalledNewImage = AWS.DynamoDB.Converter.unmarshall(record.dynamodb.NewImage)
 
                 acc.push(unmarshalledNewImage)
