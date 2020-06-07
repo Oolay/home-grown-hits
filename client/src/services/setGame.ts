@@ -27,7 +27,7 @@ export async function setGame(creator: string): Promise<SetGameResp> {
             }),
             mode: 'cors',
         })
-
+        
         const { gameId, player } = await resp.json()
 
         return {

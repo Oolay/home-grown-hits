@@ -1,4 +1,5 @@
 import React, { useState, ChangeEvent } from 'react'
+import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 import {
     TextField,
@@ -8,7 +9,19 @@ import {
 
 import { setGame } from '../services/setGame'
 
+const useStyles = makeStyles({
+    container: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    createButton: {
+        marginTop: '16px',
+    }
+})
+
 const Home: React.FC = () => {
+    const classes = useStyles()
     const history = useHistory()
     const [playerName, setPlayerName] = useState<string>('')
 
@@ -29,20 +42,22 @@ const Home: React.FC = () => {
     }
 
     return (
-        <>
-        <TextField
-            label='Name'
-            value={playerName}
-            onChange={handlePlayerNameChange}
-        />
+        <div className={classes.container}>
+            <TextField
+                label='Your name'
+                value={playerName}
+                onChange={handlePlayerNameChange}
+                variant='outlined'
+            />
 
-        <Button
-            disabled={!playerName}
-            onClick={handleCreateGame}
-        >
-            Create Game
-        </Button>
-        </>
+            <Button
+                className={classes.createButton}
+                disabled={!playerName}
+                onClick={handleCreateGame}
+            >
+                Create Game
+            </Button>
+        </div>
     )
 }
 
