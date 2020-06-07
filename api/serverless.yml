@@ -87,6 +87,13 @@ functions:
           path: /hits-games
           method: post
           cors: true
+  get-games:
+    handler: src/getGamesHandler.getGamesHandler
+    events:
+      - http:
+          path: /hits-games
+          method: get
+          cors: true
   connection-manager:
     handler: src/websocket/connectionManager.connectionManager
     events:
