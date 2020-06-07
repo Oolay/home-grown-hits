@@ -24,27 +24,32 @@ function saveGame(gameId, creator) {
 
 module.exports.setGameHandler = async event => {
     console.info(JSON.stringify(event))
-
-    const gameId = uuidv4()
-
-    const { creatorName } = JSON.parse(event.body)
-    const creatorId = uuidv4()
-    const creator = {
-        name: creatorName,
-        id: creatorId,
+    try {
+        const gameId = uuidv4()
+    
+        const { creatorName } = JSON.parse(event.body)
+        const creatorId = uuidv4()
+        const creator = {
+            name: creatorName,
+            id: creatorId,
+        }
+    
+        await saveGame(gameId, creator)
+    
+        const response = {
+            statusCode: 200,
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': true,
+            },
+            body: JSON.stringify({
+                gameId,
+                player: creator,
+            }),
+        }
+        
+        return response
+    } catch(e) {
+        console.error(e)
     }
-
-    return saveGame(gameId, creator)
-        .then((_) => {
-            const response = {
-                statusCode: 200,
-                body: JSON.stringify({
-                    gameId,
-                    player: creator,
-                }),
-            }
-
-            return response
-        })
-        .catch((e) => console.error(e))
 }
