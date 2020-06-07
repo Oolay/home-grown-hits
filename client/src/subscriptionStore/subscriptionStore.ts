@@ -94,7 +94,7 @@ export class SubscriptionStore {
 
     public ws: WebSocket | null = null
     private subscribers: Subscribers = {}
-    private websocketEndpoint = 'wss://f8n7r9ide8.execute-api.ap-southeast-2.amazonaws.com/dev'
+    private websocketEndpoint = 'wss://6iudpel5n1.execute-api.ap-southeast-2.amazonaws.com/dev'
     private token: string | null = null
     private doExpBackOff = backOff(BACK_OFF_OPTIONS)
     private disconnectionTimestamp: string | null = null
