@@ -2,7 +2,6 @@ import React from 'react'
 import { HashRouter as Router, Route, Switch } from 'react-router-dom'
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 
-import Typography from '@material-ui/core/Typography'
 import CssBaseline from '@material-ui/core/CssBaseline'
 
 import Home from './Home'
@@ -23,9 +22,9 @@ const App: React.FC = () => (
           <Game />
         </Route>
         <Route path='/' exact>
-          <Typography>
+          <div style={{ display: 'flex', flexDirection: 'column', margin: '16px' }}>
             <Home />
-          </Typography>
+          </div>
         </Route>
       </Switch>
     </Router>
