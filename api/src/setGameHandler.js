@@ -5,7 +5,7 @@ const { v4: uuidv4 } = require('uuid')
 
 const documentClient = new AWS.DynamoDB.DocumentClient({ apiVersion: '2012-10-08' })
 
-function saveGame(gameId) {
+function saveGame(gameId, creator) {
     const timestamp = new Date().valueOf()
 
     const putParams = {
@@ -13,23 +13,34 @@ function saveGame(gameId) {
         Item: {
             gameId,
             timestamp,
+            creator,
+            players: [creator],
+            hasStarted: false,
         },
     }
 
     return documentClient.put(putParams).promise()
 }
 
-module.exports.setGameHandler = async (event, context) => {
+module.exports.setGameHandler = async event => {
     console.info(JSON.stringify(event))
 
     const gameId = uuidv4()
 
-    return saveGame(gameId)
+    const { creatorName } = JSON.parse(event.body)
+    const creatorId = uuidv4()
+    const creator = {
+        name: creatorName,
+        id: creatorId,
+    }
+
+    return saveGame(gameId, creator)
         .then((_) => {
             const response = {
                 statusCode: 200,
                 body: JSON.stringify({
-                    saved: gameId
+                    gameId,
+                    player: creator,
                 }),
             }
 

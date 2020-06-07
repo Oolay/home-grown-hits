@@ -5,6 +5,7 @@ import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import CssBaseline from '@material-ui/core/CssBaseline'
 
+import Home from './Home'
 import Game from './Game'
 
 const hitsTheme = createMuiTheme({
@@ -23,7 +24,7 @@ const App: React.FC = () => (
         </Route>
         <Route path='/' exact>
           <Typography>
-            game list...
+            <Home />
           </Typography>
         </Route>
       </Switch>
