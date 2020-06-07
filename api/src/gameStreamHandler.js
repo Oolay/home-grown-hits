@@ -1,15 +1,14 @@
 
 const AWS = require('aws-sdk')
-const { handlePromiseAll } = require('../../lib/handlePromiseAll')
+const { handlePromiseAll } = require('./lib/handlePromiseAll')
 
 // Initialize AWS SNS
-AWS.config.setPromisesDependency(Bluebird)
 AWS.config.update({
     region: process.env.REGION,
 })
 const sns = new AWS.SNS()
 
-export const pushSNSWebSocketEvent = (event) => {
+const pushSNSWebSocketEvent = (event) => {
     const params = {
         TargetArn: process.env.GAME_SNS_TOPIC_ARN,
         Message: JSON.stringify(event),
@@ -36,9 +35,9 @@ module.exports.gameStreamHandler = (event, _context, callback) => {
 
         return handlePromiseAll(
             events.map(pushSNSWebSocketEvent),
-            'Handle websocket send'
+            'Game stream handler'
         )
     } catch (e) {
-        throw new Error(`notificationProcessor error: ${error.message}`)
+        throw new Error(`gameStream error: ${error.message}`)
     }
 }

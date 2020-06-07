@@ -28,6 +28,14 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action:
+        - iot:*
+      Resource: '*'
+    - Effect: Allow
+      Action:
+        - sns:Publish
+      Resource: arn:aws:sns:${self:provider.region}:*:*
+    - Effect: Allow
+      Action:
         - dynamodb:Scan
         - dynamodb:GetItem
         - dynamodb:PutItem
@@ -91,13 +99,23 @@ functions:
     events:
       - websocket:
           route: $default
-  stream:
+  game-stream:
     handler: src/gameStreamHandler.gameStreamHandler
     environment:
       GAME_SNS_TOPIC_ARN: ${env:GAME_SNS_TOPIC_ARN}
     events:
       - stream: ${env:GAME_STREAM_ARN}
-#    The following are a few example events you can configure
+
+  hits-scanner-shadow-update:
+    handler: src/setHitsScannerShadowHandler.setHitsScannerShadowHandler
+    environment:
+      HITS_SCANNER_API_ENDPOINT: ${env:HITS_SCANNER_API_ENDPOINT}
+      HITS_SCANNER_THING_NAME: ${env:HITS_SCANNER_THING_NAME}
+    events:
+      - sns:
+          topicName: homeGrownHitsGame
+          displayName: homeGrownHitsGame
+  #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
 #    events:
