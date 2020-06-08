@@ -14,7 +14,7 @@ interface SetGameResp {
     } | null
 }
 
-export async function setGame(creator: string): Promise<SetGameResp> {
+export async function setGame(creatorName: string): Promise<SetGameResp> {
     try {
         const resp = await fetch(setGameUrl, {
             method: 'POST',
@@ -23,7 +23,7 @@ export async function setGame(creator: string): Promise<SetGameResp> {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                creatorName: creator,
+                creatorName,
             }),
             mode: 'cors',
         })

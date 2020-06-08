@@ -87,6 +87,13 @@ functions:
           path: /hits-games
           method: post
           cors: true
+  join-game:
+    handler: src/joinGameHandler.joinGameHandler
+    events:
+      - http:
+          path: /hits-games
+          method: put
+          cors: true
   get-games:
     handler: src/getGamesHandler.getGamesHandler
     events:

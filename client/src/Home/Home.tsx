@@ -70,11 +70,10 @@ const Home: React.FC = () => {
                 disabled={!playerName}
                 onClick={handleCreateGame}
                 variant='outlined'
-
             >
                 Create Game
             </Button>
-            <OpenGameCardList games={openGames}/>
+            <OpenGameCardList playerName={playerName} games={openGames}/>
         </div>
     )
 }
