@@ -25,12 +25,14 @@ const OpenGameCardList: React.FC<Props> = ({ games }) => {
     return (
         <div className={classes.container}>
             {
-                games.map(({ creator, players }) => (
-                    <OpenGameCard
-                        creator={creator}
-                        players={players}
-                    />
-                ))
+                games
+                    .sort((a, b) => Number(a.timestamp) - Number(b.timestamp))
+                    .map(({ creator, players }) => (
+                        <OpenGameCard
+                            creator={creator}
+                            players={players}
+                        />
+                    ))
             }
         </div>
     )

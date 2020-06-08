@@ -18,8 +18,8 @@ const useStyles = makeStyles({
         alignItems: 'center',
     },
     createButton: {
-        marginTop: '16px',
-        marginBottom: '16px',
+        marginTop: '2rem',
+        marginBottom: '2rem',
     }
 })
 
@@ -69,6 +69,8 @@ const Home: React.FC = () => {
                 className={classes.createButton}
                 disabled={!playerName}
                 onClick={handleCreateGame}
+                variant='outlined'
+
             >
                 Create Game
             </Button>
