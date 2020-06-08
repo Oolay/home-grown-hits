@@ -1,0 +1,6 @@
+export AWS_PROFILE=''
+export REGION=''
+export GAME_STREAM_ARN=''
+export GAME_SNS_TOPIC_ARN=''
+export HITS_SCANNER_API_ENDPOINT=''
+export HITS_SCANNER_THING_NAME=''
