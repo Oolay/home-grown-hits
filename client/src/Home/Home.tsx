@@ -9,6 +9,8 @@ import {
 import { getGames, GameMetaData } from '../services/getGames'
 import { setGame } from '../services/setGame'
 
+import OpenGameCardList from './components/OpenGameCardList'
+
 const useStyles = makeStyles({
     container: {
         display: 'flex',
@@ -17,6 +19,7 @@ const useStyles = makeStyles({
     },
     createButton: {
         marginTop: '16px',
+        marginBottom: '16px',
     }
 })
 
@@ -69,6 +72,7 @@ const Home: React.FC = () => {
             >
                 Create Game
             </Button>
+            <OpenGameCardList games={openGames}/>
         </div>
     )
 }
