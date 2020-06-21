@@ -9,6 +9,7 @@ const NORMAL_CLOSURE_CODE = 1000
 export const INTENTIONAL_CLOSURE_CODE = NORMAL_CLOSURE_CODE
 
 const BACK_OFF_OPTIONS = {}
+const WS_ENDPOINT = 'wss://tqgk8j9ioh.execute-api.ap-southeast-2.amazonaws.com/dev'
 
 const formatUtcIsoString = (momentObj?: Moment) => {
     const ISO_FORMAT = 'YYYY-MM-DDTHH:mm:ss'
@@ -19,6 +20,10 @@ const formatUtcIsoString = (momentObj?: Moment) => {
 }
 
 export interface SubscriptionMessageEvents {
+    gameRoom: {
+        topic: 'gameRoom',
+        data: any
+    },
     hitsEvent: {
         data: any
         topic: 'hitsEvent'
@@ -94,7 +99,7 @@ export class SubscriptionStore {
 
     public ws: WebSocket | null = null
     private subscribers: Subscribers = {}
-    private websocketEndpoint = 'wss://6iudpel5n1.execute-api.ap-southeast-2.amazonaws.com/dev'
+    private websocketEndpoint = WS_ENDPOINT
     private token: string | null = null
     private doExpBackOff = backOff(BACK_OFF_OPTIONS)
     private disconnectionTimestamp: string | null = null
@@ -155,9 +160,9 @@ export class SubscriptionStore {
     }
 
     private handleOnMessage = (messageEvent: MessageEvent) => {
-        const message = JSON.parse(messageEvent.data)
+        const { topic, data }: Message = JSON.parse(messageEvent.data)
 
-        this.publishMessage('hitsEvent', message)
+        this.publishMessage(topic, data)
     }
 
     private publishMessage = (subscriptionTopic: keyof SubscriptionMessageEvents, data: Message['data']) => {
