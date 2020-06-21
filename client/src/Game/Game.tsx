@@ -6,8 +6,14 @@ import { createStyles, withStyles, WithStyles } from '@material-ui/core/styles'
 import subscriptionStore, { isConnectionChangeEvent } from '../subscriptionStore'
 import { Typography } from '@material-ui/core'
 
+import Huddle from './components/Huddle'
+
 const styles = (theme: any) => createStyles({
 })
+
+interface State {
+    
+}
 
 interface ParamProps {
     gameId: string
