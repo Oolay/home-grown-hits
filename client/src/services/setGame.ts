@@ -4,7 +4,7 @@ const setGameUrl = `${api}/hits-games`
 
 export interface Player {
     name: string
-    id: string
+    id: string | null
 }
 
 interface SetGameResp {

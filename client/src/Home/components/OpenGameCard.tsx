@@ -29,20 +29,19 @@ const OpenGameCard: React.FC<Props> = ({
     const handleGameCardClick = async () => {
         const playerId = localStorage.getItem('playerId')
 
-        // if someone joins a game that they are already in - just send them in with existing id
-        if (gameMetaData.players.some(player => player.id === playerId)) {
-            // TODO handle a playerName change -> need to update player in player list and creator name
-            history.push(`/${gameMetaData.gameId}`)
-        } else {
-            const joinGameResp = await joinGame(playerName, gameMetaData)
+        const player = {
+            id: playerId,
+            name: playerName,
+        }
 
-            if (joinGameResp.data) {
-                const { player, updatedGameMetaData: { gameId } } = joinGameResp.data
-    
-                localStorage.setItem('playerId', `${player.id}`)
-    
-                history.push(`/${gameId}`)
-            }
+        const joinGameResp = await joinGame(player, gameMetaData)
+
+        if (joinGameResp.data && joinGameResp.data.player) {
+            const { player, updatedGameMetaData: { gameId } } = joinGameResp.data
+
+            localStorage.setItem('playerId', `${player && player.id}`)
+
+            history.push(`/${gameId}`)
         }
     }
 

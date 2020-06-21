@@ -25,10 +25,64 @@ function updatePlayers(gameMetaData, player) {
     return documentClient.update(putParams).promise()
 }
 
+async function hasGameStarted(gameMetaData) {
+    const getParams = {
+        TableName: 'homeGrownHitsGames',
+        Key: {
+            'gameId': gameMetaData.gameId,
+            'timestamp': gameMetaData.timestamp,
+        },
+    }
+
+    const { Item } = await documentClient.get(getParams).promise()
+
+    return Item
+}
+
+function checkIfPlayerInGame(playerId, game) {
+    return game.players.some(player => player.id === playerId)
+}
+
 module.exports.joinGameHandler = async event => {
     console.info(JSON.stringify(event))
+
     try {    
-        const { playerName, gameMetaData } = JSON.parse(event.body)
+        const { playerDetails, gameMetaData } = JSON.parse(event.body)
+
+        const game = await hasGameStarted(gameMetaData)
+
+        console.log('GAME elo', game)
+
+        if (game && game.hasStarted) {
+            return {
+                statusCode: 200,
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Credentials': true,
+                },
+                body: JSON.stringify({
+                    player: null,
+                    gameMetaData,
+                }),
+            }
+        }
+
+        const isPlayerInGame = checkIfPlayerInGame(playerDetails.id, gameMetaData)
+
+        if (isPlayerInGame) {
+            return {
+                statusCode: 200,
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Credentials': true,
+                },
+                body: JSON.stringify({
+                    player: playerDetails,
+                    gameMetaData,
+                }),
+            }
+        }
+
         const playerId = uuidv4()
         const player = {
             name: playerName,
@@ -36,8 +90,6 @@ module.exports.joinGameHandler = async event => {
         }
     
         const updatedGame = await updatePlayers(gameMetaData, player)
-
-        console.log('updatedGame', updatedGame)
     
         const response = {
             statusCode: 200,
@@ -46,7 +98,7 @@ module.exports.joinGameHandler = async event => {
                 'Access-Control-Allow-Credentials': true,
             },
             body: JSON.stringify({
-                player: player,
+                player,
                 gameMetaData: updatedGame,
             }),
         }

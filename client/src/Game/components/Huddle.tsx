@@ -25,7 +25,13 @@ const Huddle: React.FC<Props> = ({
 
     return (
         <div className={classes.container}>
-            {gameMetaData.players.map(player => <Typography>{player.name}</Typography>)}
+            {
+                gameMetaData.players.map(player => (
+                    <Typography>
+                        {player.name}
+                    </Typography>
+                ))
+            }
         </div>
     )
 }
