@@ -1,13 +1,13 @@
 
 const AWS = require('aws-sdk')
-const { handlePromiseAll } = require('../../lib/handlePromiseAll')
+const { handlePromiseAll } = require('./lib/handlePromiseAll')
 
 const documentClient = new AWS.DynamoDB.DocumentClient({ apiVersion: '2012-10-08' })
-const connectionTableName = 'hitsConnections'
+const connectionTableName = 'homeGrownHitsConnections'
 
 const apiGateway = new AWS.ApiGatewayManagementApi({
     apiVersion: '2018-11-29',
-    endpoint: 'https://f8n7r9ide8.execute-api.ap-southeast-2.amazonaws.com/dev'
+    endpoint: process.env.SUBSCRIPTION_WS_ENDPOINT,
 })
 
 async function getWebSocketConnections(gameId) {
@@ -21,7 +21,7 @@ async function getWebSocketConnections(gameId) {
         },
         ScanIndexForward: true,
     }
-    const queryOutput = await documentClient.scan(queryParams).promise()
+    const queryOutput = await documentClient.query(queryParams).promise()
 
     return (queryOutput.Items || [])
 }
@@ -39,6 +39,8 @@ async function publishGameDataToSubscribers(gameData) {
     const connections = await getWebSocketConnections(gameId)
     const connectionIds = connections.map(c => c.connectionId)
 
+    console.info('sending to connectionIds:', ...connectionIds)
+
     // Add game data into structure expected by client
     const event = {
         topic: 'gameRoom',
@@ -53,7 +55,7 @@ async function publishGameDataToSubscribers(gameData) {
 }
 
 
-module.exports.subscriptionGameDataHandler = (event, _context, callback) => {
+module.exports.subscriptionGameDataHandler = async (event, _context, callback) => {
     console.info('Received event:', JSON.stringify(event, null, 2))
 
     try {
@@ -72,7 +74,7 @@ module.exports.subscriptionGameDataHandler = (event, _context, callback) => {
         await handlePromiseAll(publishGameData, 'Handle hits scanner shadow update')
 
         callback(null)
-    } catch (e) {
+    } catch (error) {
         throw new Error(`hits subscription publish error: ${error.message}`)
     }
 }

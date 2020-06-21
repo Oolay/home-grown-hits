@@ -128,8 +128,10 @@ functions:
       - sns:
           topicName: homeGrownHitsGame
           displayName: homeGrownHitsGame
-  hits-scanner-game-data:
+  subscription-game-data:
     handler: src/subscriptionGameDataHandler.subscriptionGameDataHandler
+    environment:
+      SUBSCRIPTION_WS_ENDPOINT: ${env:SUBSCRIPTION_WS_ENDPOINT}
     events:
       - sns:
           topicName: homeGrownHitsGame
