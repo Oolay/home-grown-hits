@@ -38,7 +38,7 @@ module.exports.hitsScannerGameDataHandler = async (event, _context, callback) =>
     console.info('Received event:', JSON.stringify(event, null, 2))
 
     try {
-        const updateShadow = event.Records.reduce((allProcesses, record) => {
+        const updateHitsScanner = event.Records.reduce((allProcesses, record) => {
             try {
                 const data = JSON.parse(record.Sns.Message)
 
@@ -50,10 +50,10 @@ module.exports.hitsScannerGameDataHandler = async (event, _context, callback) =>
             return allProcesses
         }, [])
 
-        await handlePromiseAll(updateShadow, 'Handle hits scanner shadow update')
+        await handlePromiseAll(updateHitsScanner, 'Handle hits scanner update')
 
         callback(null)
     } catch (e) {
-        throw new Error(`hits scanner shadow update error: ${error.message}`)
+        throw new Error(`hits scanner update error: ${error.message}`)
     }
 }

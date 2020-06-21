@@ -119,12 +119,17 @@ functions:
       GAME_SNS_TOPIC_ARN: ${env:GAME_SNS_TOPIC_ARN}
     events:
       - stream: ${env:GAME_STREAM_ARN}
-
   hits-scanner-game-data:
     handler: src/hitsScannerGameDataHandler.hitsScannerGameDataHandler
     environment:
       HITS_SCANNER_API_ENDPOINT: ${env:HITS_SCANNER_API_ENDPOINT}
       HITS_SCANNER_THING_NAME: ${env:HITS_SCANNER_THING_NAME}
+    events:
+      - sns:
+          topicName: homeGrownHitsGame
+          displayName: homeGrownHitsGame
+  hits-scanner-game-data:
+    handler: src/subscriptionGameDataHandler.subscriptionGameDataHandler
     events:
       - sns:
           topicName: homeGrownHitsGame
