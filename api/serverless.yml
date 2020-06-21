@@ -120,8 +120,8 @@ functions:
     events:
       - stream: ${env:GAME_STREAM_ARN}
 
-  hits-scanner-shadow-update:
-    handler: src/setHitsScannerShadowHandler.setHitsScannerShadowHandler
+  hits-scanner-game-data:
+    handler: src/hitsScannerGameDataHandler.hitsScannerGameDataHandler
     environment:
       HITS_SCANNER_API_ENDPOINT: ${env:HITS_SCANNER_API_ENDPOINT}
       HITS_SCANNER_THING_NAME: ${env:HITS_SCANNER_THING_NAME}

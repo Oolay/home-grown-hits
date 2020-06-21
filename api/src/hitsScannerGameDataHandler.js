@@ -10,11 +10,31 @@ const iotData = new AWS.IotData({
     endpoint: process.env.HITS_SCANNER_API_ENDPOINT,
 })
 
-function publishHitsScannerDisplay(displayMessage) {
-    return iotData.publish(displayMessage).promise()
+function transformGameDataToDisplay(gameData) {
+    try {
+        return {
+            line1: gameData.hasStarted ? 'Started' : 'Waiting to start...',
+            line2: `Player Count: ${gameData.players.length}`
+        }
+    } catch (error) {
+        console.error(error)
+
+        return {
+            line1: 'No game started'
+        }
+    }
 }
 
-module.exports.setHitsScannerShadowHandler = async (event, _context, callback) => {
+function publishHitsScannerDisplay(gameData) {
+    const params = {
+        topic: 'hitsScanner/screenDisplay',
+        payload: JSON.stringify(transformGameDataToDisplay(gameData)),
+    }
+
+    return iotData.publish(params).promise()
+}
+
+module.exports.hitsScannerGameDataHandler = async (event, _context, callback) => {
     console.info('Received event:', JSON.stringify(event, null, 2))
 
     try {
