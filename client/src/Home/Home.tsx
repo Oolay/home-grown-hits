@@ -26,7 +26,7 @@ const useStyles = makeStyles({
 const Home: React.FC = () => {
     const classes = useStyles()
     const history = useHistory()
-    const [playerName, setPlayerName] = useState<string>('')
+    const [playerName, setPlayerName] = useState<string>(localStorage.getItem('playerName') || '')
     const [openGames, setOpenGames] = useState<GameMetaData[]>([])
 
     useEffect(() => {
@@ -42,6 +42,8 @@ const Home: React.FC = () => {
 
     const handlePlayerNameChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setPlayerName(event.target.value)
+
+        localStorage.setItem('playerName', event.target.value)
     }
 
     const handleCreateGame = async () => {
