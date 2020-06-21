@@ -31,6 +31,7 @@ const OpenGameCard: React.FC<Props> = ({
 
         // if creator joins their own game - just send them in with existing id
         if (playerId === gameMetaData.creator.id) {
+            // TODO handle a playerName change -> need to update player in player list and creator name
             history.push(`/${gameMetaData.gameId}`)
         } else {
             const joinGameResp = await joinGame(playerName, gameMetaData)
