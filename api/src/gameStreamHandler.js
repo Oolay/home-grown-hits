@@ -8,10 +8,23 @@ AWS.config.update({
 })
 const sns = new AWS.SNS()
 
+function transformGameDataToDisplay(gameData) {
+    try {
+        return {
+            line1: gameData.hasStarted ? 'Started' : 'Waiting to start...',
+            line2: `Player Count: ${gameData.players.length}`
+        }
+    } catch {
+        return {
+            line1: 'No game started'
+        }
+    }
+}
+
 const pushSNSWebSocketEvent = (event) => {
     const params = {
         TargetArn: process.env.GAME_SNS_TOPIC_ARN,
-        Message: JSON.stringify(event),
+        Message: JSON.stringify(transformGameDataToDisplay(event)),
     }
 
     return sns.publish(params).promise()

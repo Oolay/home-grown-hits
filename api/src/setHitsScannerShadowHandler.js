@@ -10,21 +10,8 @@ const iotData = new AWS.IotData({
     endpoint: process.env.HITS_SCANNER_API_ENDPOINT,
 })
 
-function updateHitsShadowState(gameState) {
-    const payload = {
-        state: {
-            desired: {
-                gameState,
-            },
-        }
-    }
-
-    const params = {
-        payload: JSON.stringify(payload),
-        thingName: process.env.HITS_SCANNER_THING_NAME
-    }
-
-    return iotData.updateThingShadow(params).promise()
+function publishHitsScannerDisplay(displayMessage) {
+    return iotData.publish(displayMessage).promise()
 }
 
 module.exports.setHitsScannerShadowHandler = async (event, _context, callback) => {
@@ -35,7 +22,7 @@ module.exports.setHitsScannerShadowHandler = async (event, _context, callback) =
             try {
                 const data = JSON.parse(record.Sns.Message)
 
-                allProcesses.concat(updateHitsShadowState(data))
+                allProcesses.concat(publishHitsScannerDisplay(data))
             } catch (error) {
                 console.error(`Handle SNS records error: ${error.message}`)
             }
