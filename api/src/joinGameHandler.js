@@ -59,6 +59,7 @@ module.exports.joinGameHandler = async event => {
                     'Access-Control-Allow-Credentials': true,
                 },
                 body: JSON.stringify({
+                    status: 'gameStarted',
                     player: null,
                     gameMetaData,
                 }),
@@ -75,6 +76,7 @@ module.exports.joinGameHandler = async event => {
                     'Access-Control-Allow-Credentials': true,
                 },
                 body: JSON.stringify({
+                    status: 'alreadyInGame',
                     player: playerDetails,
                     gameMetaData,
                 }),
@@ -96,6 +98,7 @@ module.exports.joinGameHandler = async event => {
                 'Access-Control-Allow-Credentials': true,
             },
             body: JSON.stringify({
+                status: 'joinedGame',
                 player,
                 gameMetaData: updatedGame,
             }),

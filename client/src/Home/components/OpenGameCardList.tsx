@@ -18,9 +18,10 @@ const useStyles = makeStyles({
 interface Props {
     playerName: string
     games: GameMetaData[]
+    handleJoinGame: (gameDate: GameMetaData) => () => void
 }
 
-const OpenGameCardList: React.FC<Props> = ({ playerName, games }) => {
+const OpenGameCardList: React.FC<Props> = ({ playerName, games, handleJoinGame }) => {
     const classes = useStyles()
 
     return (
@@ -28,10 +29,11 @@ const OpenGameCardList: React.FC<Props> = ({ playerName, games }) => {
             {
                 games
                     .sort((a, b) => Number(a.timestamp) - Number(b.timestamp))
-                    .map(gameMetaDate => (
+                    .map(gameMetaData => (
                         <OpenGameCard
                             playerName={playerName}
-                            gameMetaData={gameMetaDate}
+                            gameMetaData={gameMetaData}
+                            handleJoinGame={handleJoinGame(gameMetaData)}
                         />
                     ))
             }

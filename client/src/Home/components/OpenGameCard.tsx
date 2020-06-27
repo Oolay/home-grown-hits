@@ -4,7 +4,6 @@ import { useHistory } from 'react-router-dom'
 import { Paper, Typography } from '@material-ui/core'
 
 import { GameMetaData } from '../../services/getGames'
-import { joinGame } from '../../services/joinGame'
 
 const useStyles = makeStyles({
     container: {
@@ -17,39 +16,22 @@ const useStyles = makeStyles({
 interface Props {
     playerName: string
     gameMetaData: GameMetaData
+    handleJoinGame: () => void
 }
 
 const OpenGameCard: React.FC<Props> = ({
     playerName,
     gameMetaData,
+    handleJoinGame,
  }) => {
     const classes = useStyles()
     const history = useHistory()
-
-    const handleGameCardClick = async () => {
-        const playerId = localStorage.getItem('playerId')
-
-        const player = {
-            id: playerId,
-            name: playerName,
-        }
-
-        const joinGameResp = await joinGame(player, gameMetaData)
-
-        if (joinGameResp.data && joinGameResp.data.player) {
-            const { player } = joinGameResp.data
-
-            localStorage.setItem('playerId', `${player && player.id}`)
-
-            history.push(`/${gameMetaData.gameId}`)
-        }
-    }
 
     return (
         <Paper
             elevation={3}
             className={classes.container}
-            onClick={handleGameCardClick}
+            onClick={handleJoinGame}
         >
             <Typography>
                 {`Creator: ${gameMetaData.creator.name}`}
