@@ -37,11 +37,11 @@ const OpenGameCard: React.FC<Props> = ({
         const joinGameResp = await joinGame(player, gameMetaData)
 
         if (joinGameResp.data && joinGameResp.data.player) {
-            const { player, updatedGameMetaData: { gameId } } = joinGameResp.data
+            const { player } = joinGameResp.data
 
             localStorage.setItem('playerId', `${player && player.id}`)
 
-            history.push(`/${gameId}`)
+            history.push(`/${gameMetaData.gameId}`)
         }
     }
 
