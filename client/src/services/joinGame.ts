@@ -13,6 +13,7 @@ interface JoinGameResp {
 }
 
 export async function joinGame(playerDetails: Player, gameData: GameMetaData): Promise<JoinGameResp> {
+    console.log('playerDetails', playerDetails)
     try {
         const resp = await fetch(joinGameUrl, {
             method: 'PUT',
@@ -21,7 +22,7 @@ export async function joinGame(playerDetails: Player, gameData: GameMetaData): P
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                player: playerDetails,
+                playerDetails,
                 gameMetaData: gameData,
             }),
             mode: 'cors',

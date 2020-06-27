@@ -51,8 +51,6 @@ module.exports.joinGameHandler = async event => {
 
         const game = await hasGameStarted(gameMetaData)
 
-        console.log('GAME elo', game)
-
         if (game && game.hasStarted) {
             return {
                 statusCode: 200,
@@ -85,7 +83,7 @@ module.exports.joinGameHandler = async event => {
 
         const playerId = uuidv4()
         const player = {
-            name: playerName,
+            name: playerDetails.name,
             id: playerId,
         }
     
