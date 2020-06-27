@@ -22,7 +22,7 @@ const JoinGameDialog: React.FC<Props> = ({
         onClose={onCancel}
     >
         <DialogContent>
-            You are currently already in a game. Would you like to leave current game and join this one?
+            You are already in a game. Would you like to leave current game and join this one?
         </DialogContent>
         <DialogActions>
             <Button onClick={onCancel}>

@@ -8,9 +8,6 @@ import {
 
 import { getGames, GameMetaData } from '../services/getGames'
 import { setGame } from '../services/setGame'
-import { joinGame } from '../services/joinGame'
-
-import checkPlayerCurrentlyInGame from '../utils/checkPlayerCurrentlyInGame'
 
 import OpenGameCardList from './components/OpenGameCardList'
 import JoinGameDialog from './components/JoinGameDialog'
@@ -61,39 +58,6 @@ const Home: React.FC = () => {
         }
     }
 
-    const handleJoinGame = (gameMetaData: GameMetaData) => async () => {
-        const playerId = localStorage.getItem('playerId')
-
-        const playerDetails = {
-            id: playerId,
-            name: playerName,
-        }
-
-        const joinGameResp = await joinGame(playerDetails, gameMetaData)
-
-        if (!joinGameResp.data) {
-            return
-        }
-
-        const { status, player } = joinGameResp.data
-
-        if (status === 'alreadyInGame' || status === 'gameStarted') {
-            history.push(`/${gameMetaData.gameId}`)
-
-            return
-        }
-
-        // not in the game they are trying to join
-        if (checkPlayerCurrentlyInGame()) {
-            // show the dialog
-        }
-
-        localStorage.setItem('playerId', `${player && player.id}`)
-        localStorage.setItem('currentGame', gameMetaData.gameId)
-
-        history.push(`/${gameMetaData.gameId}`)
-    }
-
     return (
         <div className={classes.container}>
             <TextField
@@ -111,8 +75,10 @@ const Home: React.FC = () => {
             >
                 Create Game
             </Button>
-            <OpenGameCardList playerName={playerName} games={openGames}/>
-            <JoinGameDialog />
+            <OpenGameCardList
+                playerName={playerName}
+                games={openGames}
+            />
         </div>
     )
 }
