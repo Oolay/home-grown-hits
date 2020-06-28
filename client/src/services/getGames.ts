@@ -1,7 +1,11 @@
 import { api } from './api'
-import { Player } from './setGame'
 
-const getOpenGamesUrl = `${api}/hits-games`
+const HITS_GAMES_URL = `${api}/hits-games`
+
+interface Player {
+    name: string
+    id: string
+}
 
 export interface GameMetaData {
     gameId: string
@@ -11,9 +15,19 @@ export interface GameMetaData {
     hasStarted: boolean
 }
 
-export async function getGames(): Promise<GameMetaData[]> {
+export async function getGame(gameId: string): Promise<GameMetaData>{
+    const [gameData] = await getGames(gameId)
+
+    return gameData
+}
+
+export async function getGames(gameId?: string): Promise<GameMetaData[]> {
     try {
-        const resp = await fetch(getOpenGamesUrl, {
+        const url = gameId
+            ? `${HITS_GAMES_URL}/${gameId}`
+            : HITS_GAMES_URL
+
+        const resp = await fetch(url, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',

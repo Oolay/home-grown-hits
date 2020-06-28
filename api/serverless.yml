@@ -105,9 +105,13 @@ functions:
     handler: src/getGamesHandler.getGamesHandler
     events:
       - http:
-          path: /hits-games
+          path: /hits-games/{gameId}
           method: get
           cors: true
+          request:
+            parameters:
+              paths:
+                gameId: true
   connection-manager:
     handler: src/websocket/connectionManager.connectionManager
     events:
