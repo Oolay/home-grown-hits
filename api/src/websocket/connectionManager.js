@@ -17,7 +17,7 @@ function saveConnection(connectionId, gameId) {
     return documentClient.put(putParams).promise()
 }
 
-function removeConnection({ connectionId, gameId }) {
+function removeConnection(connectionId, gameId) {
     const deleteParams = {
         TableName: connectionTableName,
         Key: {
