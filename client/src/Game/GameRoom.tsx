@@ -1,18 +1,17 @@
 import React from 'react'
 import { withRouter, RouteComponentProps } from 'react-router-dom'
 
+import { Typography } from '@material-ui/core'
 import { createStyles, withStyles, WithStyles } from '@material-ui/core/styles'
 
 import subscriptionStore, { isConnectionChangeEvent } from '../subscriptionStore'
-import { Typography } from '@material-ui/core'
-
-import Huddle from './components/Huddle'
+import { getGame, GameMetaData } from '../services/getGames'
 
 const styles = (theme: any) => createStyles({
 })
 
 interface State {
-    
+    gameData: GameMetaData | null
 }
 
 interface ParamProps {
@@ -21,16 +20,19 @@ interface ParamProps {
 
 interface Props extends WithStyles, RouteComponentProps<ParamProps> {}
 
-class Game extends React.Component<Props> {
+class Game extends React.Component<Props, State> {
+    state: State = { gameData: null }
+
     componentDidMount() {
+
         const { gameId } = this.props.match.params
 
         subscriptionStore.initialise(gameId)
 
-        subscriptionStore.subscribe('hitsEvent', this.eventHandler)
+        subscriptionStore.subscribe('gameRoom', this.eventHandler)
 
         if (gameId) {
-            this.loadPreviousEvents(gameId)
+            this.loadGame(gameId)
         }
     }
 
@@ -42,27 +44,26 @@ class Game extends React.Component<Props> {
         }
     }
 
-    private loadPreviousEvents = async (gameId: string) => {
-        return []
+    private loadGame = async (gameId: string) => {
+        const gameData = await getGame(gameId)
+
+        this.setState({ gameData })
     }
 
-    private eventHandler = (event: any) => {
-        if (isConnectionChangeEvent(event)) {
+    private eventHandler = (eventData: any) => {
+        if (isConnectionChangeEvent(eventData)) {
             return
         }
 
-        const { data } = event
-
-        if (!data) {
+        if (!eventData) {
             return
         }
 
-        // TODO...
-        console.log('event', event)
+        this.setState({ gameData: eventData })
     }
 
     public render () {
-        if (!this.gameId) {
+        if (!this.state.gameData) {
             return (
                 <Typography>
                     Game id no found
@@ -71,9 +72,18 @@ class Game extends React.Component<Props> {
         }
 
         return (
-            <Typography>
-                {this.gameId}
-            </Typography>
+            <div>
+                <Typography>
+                    {this.gameId}
+                </Typography>
+                {
+                    this.state.gameData.players.map(player => (
+                        <Typography key={player.id}>
+                            {player.name}
+                        </Typography>
+                    ))
+                }
+            </div>
         )
     }
 
