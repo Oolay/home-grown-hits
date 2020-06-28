@@ -45,6 +45,7 @@ provider:
       Resource:
         - arn:aws:dynamodb:ap-southeast-2:972124391741:table/homeGrownHitsGames
         - arn:aws:dynamodb:ap-southeast-2:972124391741:table/homeGrownHitsConnections
+        - arn:aws:dynamodb:ap-southeast-2:972124391741:table/homeGrownHitsConnections/index/connectionId-index
 
 # you can overwrite defaults here
 #  stage: dev

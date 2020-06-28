@@ -22,6 +22,7 @@ interface Props extends WithStyles, RouteComponentProps<ParamProps> {}
 
 class Game extends React.Component<Props, State> {
     state: State = { gameData: null }
+    private unsubscribeGameEvents: (() => void) | null = null
 
     componentDidMount() {
 
@@ -29,11 +30,22 @@ class Game extends React.Component<Props, State> {
 
         subscriptionStore.initialise(gameId)
 
-        subscriptionStore.subscribe('gameRoom', this.eventHandler)
+        // Store unsubscribe callback
+        this.unsubscribeGameEvents = subscriptionStore.subscribe('gameRoom', this.eventHandler).unsubscribe
 
         if (gameId) {
             this.loadGame(gameId)
         }
+    }
+
+    componentWillUnmount() {
+        // Remove game data subscription
+        if (typeof this.unsubscribeGameEvents === 'function') {
+            this.unsubscribeGameEvents()
+        }
+
+        // We only support a single websocket connection for a game room, so also disconnect from web socket
+        subscriptionStore.closeConnection()
     }
 
     private get gameId() {
