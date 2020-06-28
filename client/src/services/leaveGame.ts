@@ -2,7 +2,7 @@ import { api } from './api'
 import { GameMetaData } from './getGames'
 import { Player } from './setGame'
 
-const leaveGameUrl = `${api}/hits-games`
+const leaveGameUrl = `${api}/leave-game`
 
 
 interface JoinGameResp {
@@ -27,7 +27,7 @@ export async function leaveGame(playerDetails: Player, gameData: GameMetaData): 
             }),
             mode: 'cors',
         })
-        
+
         const { player, gameMetaData } = await resp.json()
 
         return {

@@ -2,7 +2,7 @@ import { api } from './api'
 import { GameMetaData } from './getGames'
 import { Player } from './setGame'
 
-const joinGameUrl = `${api}/hits-games`
+const joinGameUrl = `${api}/join-game`
 
 type JoinStatus = 'gameStarted' | 'alreadyInGame' | 'joinedGame'
 
@@ -29,7 +29,7 @@ export async function joinGame(playerDetails: Player, gameData: GameMetaData): P
             }),
             mode: 'cors',
         })
-        
+
         const { status, player, gameMetaData } = await resp.json()
 
         return {

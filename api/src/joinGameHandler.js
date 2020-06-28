@@ -25,7 +25,7 @@ function updatePlayers(gameMetaData, player) {
     return documentClient.update(putParams).promise()
 }
 
-async function hasGameStarted(gameMetaData) {
+async function getGame(gameMetaData) {
     const getParams = {
         TableName: 'homeGrownHitsGames',
         Key: {
@@ -46,10 +46,10 @@ function checkIfPlayerInGame(playerId, game) {
 module.exports.joinGameHandler = async event => {
     console.info(JSON.stringify(event))
 
-    try {    
+    try {
         const { playerDetails, gameMetaData } = JSON.parse(event.body)
 
-        const game = await hasGameStarted(gameMetaData)
+        const game = await getGame(gameMetaData)
 
         if (game && game.hasStarted) {
             return {
@@ -88,9 +88,9 @@ module.exports.joinGameHandler = async event => {
             name: playerDetails.name,
             id: playerId,
         }
-    
+
         const updatedGame = await updatePlayers(gameMetaData, player)
-    
+
         const response = {
             statusCode: 200,
             headers: {
@@ -103,7 +103,7 @@ module.exports.joinGameHandler = async event => {
                 gameMetaData: updatedGame,
             }),
         }
-        
+
         return response
     } catch(e) {
         console.error(e)

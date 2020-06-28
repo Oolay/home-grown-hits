@@ -91,14 +91,14 @@ functions:
     handler: src/joinGameHandler.joinGameHandler
     events:
       - http:
-          path: /hits-games
+          path: /join-game
           method: put
           cors: true
   leave-game:
     handler: src/leaveGameHandler.leaveGameHandler
     events:
       - http:
-          path: /hits-games
+          path: /leave-game
           method: put
           cors: true
   get-games:
