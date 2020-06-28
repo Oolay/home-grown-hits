@@ -94,6 +94,13 @@ functions:
           path: /hits-games
           method: put
           cors: true
+  leave-game:
+    handler: src/leaveGameHandler.leaveGameHandler
+    events:
+      - http:
+          path: /hits-games
+          method: put
+          cors: true
   get-games:
     handler: src/getGamesHandler.getGamesHandler
     events:
