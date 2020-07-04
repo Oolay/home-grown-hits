@@ -1,11 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 import { Paper, Typography } from '@material-ui/core'
 
+import playerStore from '../../stores/playerStore'
+
+import { Player } from '../../services/setGame'
 import { GameMetaData } from '../../services/getGames'
 import { joinGame } from '../../services/joinGame'
-import checkIfPlayerInAnotherGame from '../../utils/checkIfPlayerInAnotherGame'
+import { leaveGame } from '../../services/leaveGame'
+import getOtherJoinedGames from '../../utils/getOtherJoinedGames'
 
 import JoinGameDialog from './JoinGameDialog'
 
@@ -57,10 +61,11 @@ const OpenGameCard: React.FC<Props> = ({
     }
 
     const handleGameCardClick = async () => {
-        const isPlayerInAnotherGame = await checkIfPlayerInAnotherGame(gameMetaData.gameId)
+        const joinedGames = await getOtherJoinedGames(gameMetaData.gameId)
 
-        if (isPlayerInAnotherGame) {
+        if (joinedGames.length > 0) {
             setShowJoinWarning(true)
+            playerStore.setJoinedGames(joinedGames)
 
             return
         }
@@ -68,11 +73,21 @@ const OpenGameCard: React.FC<Props> = ({
         handleJoinGame()
     }
 
-    const handleJoinWarningJoin = () => {
-        // TODO leave other game
+    const handleJoinWarningJoin = async () => {
+        const playerName = localStorage.getItem('playerName')
+        const playerId = localStorage.getItem('playerId')
 
-        handleJoinGame()
+        const player = {
+            id: playerId,
+            name: playerName,
+        } as Player
+
+        await Promise.all(
+            playerStore.joinedGames.map(gameMetaData => leaveGame(player, gameMetaData))
+        )
+
         setShowJoinWarning(false)
+        handleJoinGame()
     }
 
     const onJoinWarningCancel = () => {

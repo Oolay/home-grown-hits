@@ -10,7 +10,6 @@ import { getGames, GameMetaData } from '../services/getGames'
 import { setGame } from '../services/setGame'
 
 import OpenGameCardList from './components/OpenGameCardList'
-import JoinGameDialog from './components/JoinGameDialog'
 
 const useStyles = makeStyles({
     container: {
